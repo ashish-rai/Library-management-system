@@ -1,3 +1,4 @@
+import csv
 import time
 from users import User
 from transaction import Transaction
@@ -27,7 +28,7 @@ class Book():
                 print("Book added successfully!")
                 print("---------------")
 
-        else:
+        else: 
             print("Book already exists!!!")
 
 
@@ -56,3 +57,23 @@ class Book():
             print("Incorrect email !!!!")
 
     
+    def show_books():
+        with open("book_data.csv", "r") as file:
+            reader = csv.reader(file)
+            print("----------------------------------------------------------------------------")
+            print("                            Available Books                                 ")
+            print("----------------------------------------------------------------------------")        
+            for row in reader:
+                if len(row) >= 7:
+                    print(f"{row[0]}--{row[1]}--{row[2]}--{row[3]}--{row[4]}--{row[5]}--{row[6]}")
+
+    
+    def get_books_from_ids(book_ids):
+        found_books = []
+        with open('book_data.csv', 'r') as file:
+            for line in file:
+                book = line.strip().split(',')
+                if book[0].lower() in book_ids:
+                    found_books.append(book)
+        
+        return found_books

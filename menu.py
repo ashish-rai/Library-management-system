@@ -1,8 +1,8 @@
 from books import Book
 from users import User
-import csv
 from transaction import Transaction
 import datetime
+import csv
 
 print("----Welcome to Takeo Library Management System----")
 
@@ -15,7 +15,7 @@ user_choice = int(input("Please select from the following menu:\n"
                          "To add a book--Enter 6 \n"
                          " Enter Choice: "))
 
-while user_choice != 3:
+while user_choice != 'exit':
 
     if user_choice == 1:
 
@@ -28,22 +28,14 @@ while user_choice != 3:
         print()
 
         # display available books from books.csv show id and some description
-        with open("book_data.csv", "r") as file:
-            reader = csv.reader(file)
-            print("------------------------")
-            print("Available Books:")
-            print("------------------------")
-            
-            for row in reader:
-                if len(row) >= 7:
-                    print(f"{row[0]}--{row[1]}--{row[2]}--{row[3]}--{row[4]}--{row[5]}--{row[6]}")
+        Book.show_books()
 
         book_id = input("Enter Book Id: ")
         print()
         print("Making Transaction................")
 
         user = User(name=name, email=email, phone_no=phone_no, address = address)
-        user.add_user_to_csv()
+        user.add_to_csv()
         
         transaction_date = datetime.date.today()
         due_date = transaction_date + datetime.timedelta(days=Transaction.Due_Duration)
@@ -57,7 +49,46 @@ while user_choice != 3:
         Book.return_book(email)
 
     elif user_choice == 3:
-        pass
+        print('*** You can extend your book here ***\n')
+        user_email = input("Please enter your Email: ")
+        user = User.find_user_by_email(user_email)
+        
+        if user:
+            book_ids = Transaction.get_borrowed_book_ids_by_user(user[0])
+            found_books = Book.get_books_from_ids(book_ids)
+           
+            if len(found_books) > 0:
+                print('These are the borrowed books found in our database for you:\n')
+                print('---------------------------------------------------------------------')
+                print('Book_ID | Book_Name | Title | Author | Quantity | Edition | Pub_Year')
+                print('---------------------------------------------------------------------\n')
+                for book in found_books:
+                    print('     |    '.join(book))
+
+                is_extend = True
+                while is_extend:
+                    extend_book = input("Please enter a book title for book you want to extend: ")
+                    for book in found_books:
+                        if book[2].lower() == extend_book.lower():
+                            try:
+                                extension_days = int(input("Please enter the number of days you want to extend the loan: "))
+                                Transaction.extend_book_due_date_for_user(book[0], user[0], extension_days)
+                                print('-----------------------------------')
+                                print("Return date updated successfully!")
+                                is_extend = False  # Exit the while loop
+
+                            except ValueError as e:
+                                print(e)
+                                print("Invalid input. Please enter a valid number of days.")
+                            break
+
+                if is_extend:
+                    print("No book found with the given title. Please try again.")
+            
+            else:
+                print("You have not borrowed any books yet")
+
+
 
     elif user_choice == 4:
         pass

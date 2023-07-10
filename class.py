@@ -16,7 +16,7 @@ class Borrower:
         self.phone_number = phone_number
         self.DOB = DOB
         self.address = address
-        self.borrow
+        self.borrow 
 
 class Transaction:
     def __init__ (self, )
