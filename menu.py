@@ -6,16 +6,17 @@ import csv
 
 print("----Welcome to Takeo Library Management System----")
 
-user_choice = int(input("Please select from the following menu:\n"
+user_choice = input("Please select from the following menu:\n"
                          "To borrow a book--Enter 1 \n"
                          "To return a book--Enter 2 \n"
                          "To extend a loan--Enter 3 \n"
                          "To add a user--Enter 4 \n"
                          "To update a user--Enter 5 \n"
                          "To add a book--Enter 6 \n"
-                         " Enter Choice: "))
+                         "Enter 7 to 'exit' \n"
+                         " Enter Choice: ")
 
-while user_choice != 'exit':
+while user_choice != 7:
 
     if user_choice == 1:
 
@@ -91,13 +92,41 @@ while user_choice != 'exit':
 
 
     elif user_choice == 4:
-        pass
+        name = input("Enter name: ")
+        email = input("Enter email: ")
+        phone_no = input("Enter phone no: ")
+        address = input("Enter your address: ")
+        user_data = f"{name}-{email}-{phone_no}-{address}\n"
+        with open("users.csv", "a") as file:
+            file.write(user_data)
+        print("User added successfully!")
+
 
     elif user_choice == 5:
-        pass
+        email = input("Enter email to update: ")
+        updated_data = []
+        with open("users.csv", "r") as file:
+            for line in file:
+                user_info = line.strip().split(",")
+                if len(user_info) >= 3 and user_info[2] == email:
+                    name = input("Enter New name: ")
+                    phone_no = input("Enter nee phone_no: ")
+                    address = input("Enter new address: ")
+                    user = User(name, email, phone_no, address)
+                    updated_data.append(user)
+                    print("User information updated successfully!")
+                else:
+                    updated_data.append(user_info)
+
+        with open("users.csv", "w") as file:
+            for data in updated_data:
+                if isinstance(data, User):
+                    user_data = f"{data.id},{data.name},{data.email},{data.phone_no},{data.address}\n"
+                    file.write(user_data)
+                else:
+                    file.write(",".join(data) + "\n")
 
     elif user_choice == 6:
-
         book_name = input("Enter Book Name: ")
         title = input("Enter Title: ")
         author = input("Enter author: ")
@@ -110,14 +139,14 @@ while user_choice != 'exit':
     else: 
         print("Invalid Input!!!!")
     
-    print("----Welcome to Takeo Library Management System----")
-    user_choice = int(input("Please select from the following menu:\n"
-                         "To borrow a book--Enter 1 \n"
-                         "To return a book--Enter 2 \n"
-                         "To extend a loan--Enter 3 \n"
-                         "To add a user--Enter 4 \n"
-                         "To update a user--Enter 5 \n"
-                         "To add a book--Enter 6 \n"
-                         " Enter Choice: "))
+print("----Welcome to Takeo Library Management System----")
+user_choice = int(input("Please select from the following menu:\n"
+                        "To borrow a book--Enter 1 \n"
+                        "To return a book--Enter 2 \n"
+                        "To extend a loan--Enter 3 \n"
+                        "To add a user--Enter 4 \n"
+                        "To update a user--Enter 5 \n"
+                        "To add a book--Enter 6 \n"
+                        " Enter Choice: "))
 
 print("Exiting Program......")

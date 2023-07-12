@@ -14,7 +14,7 @@ class Transaction():
         self.transaction_date = transaction_date
         self.due_date = due_date
         self.return_date = None
-
+ 
     def make_transaction(self):
         transaction_detail = f"{self.transaction_id},{self.user_id},{self.book_id},{self.transaction_date},{self.due_date},{self.return_date}\n"
         with open("transaction.csv", "a") as file:
