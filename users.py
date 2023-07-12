@@ -18,7 +18,7 @@ class User:
             print("User added successfully!")   
             print("-----------------------------")
         
-        else:
+        else: 
             print("User Exists. Continue")
 
     

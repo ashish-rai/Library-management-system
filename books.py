@@ -16,7 +16,7 @@ class Book():
         self.pub_year = pub_year
         self.edition = edition
 
-
+ 
     def add_book(self):
         book_data = f"{self.book_id},{self.book_name},{self.title},{self.author},{self.quantity},{self.edition},{self.pub_year}\n"
         found = self.search_book_by_title(self.title)
